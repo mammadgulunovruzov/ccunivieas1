@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: section-service
-          image: gcr.io/univiecca1/section-service-2023w
+          image: gcr.io/airport-cc/section-service-2023w
           ports:
             - containerPort: 8084

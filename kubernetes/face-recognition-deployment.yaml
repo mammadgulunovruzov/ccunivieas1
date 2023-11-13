@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: face-recognition
-          image: gcr.io/univiecca1/face-recognition-service-2023w
+          image: gcr.io/airport-cc/face-recognition-service-2023w
           ports:
             - containerPort: 8082

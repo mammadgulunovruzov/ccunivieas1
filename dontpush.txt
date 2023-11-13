@@ -1,4 +1,4 @@
-gcloud beta container --project "______change___________" clusters create "cluster-cca" --zone "europe-central2-c" --no-enable-basic-auth --cluster-version "1.27.3-gke.100" --release-channel "regular" --machine-type "e2-custom-4-4096" --image-type "COS_CONTAINERD" --disk-type "pd-standard" --disk-size "100" --metadata disable-legacy-endpoints=true --scopes "https://www.googleapis.com/auth/devstorage.read_only","https://www.googleapis.com/auth/logging.write","https://www.googleapis.com/auth/monitoring","https://www.googleapis.com/auth/servicecontrol","https://www.googleapis.com/auth/service.management.readonly","https://www.googleapis.com/auth/trace.append" --num-nodes "3" --logging=SYSTEM,WORKLOAD,API_SERVER --monitoring=SYSTEM,API_SERVER,POD --enable-ip-alias --network "projects/______change___________/global/networks/default" --subnetwork "projects/______change___________/regions/europe-central2/subnetworks/default" --no-enable-intra-node-visibility --default-max-pods-per-node "110" --security-posture=standard --workload-vulnerability-scanning=disabled --no-enable-master-authorized-networks --addons HorizontalPodAutoscaling,HttpLoadBalancing,GcePersistentDiskCsiDriver --enable-autoupgrade --enable-autorepair --max-surge-upgrade 1 --max-unavailable-upgrade 0 --binauthz-evaluation-mode=DISABLED --enable-managed-prometheus --enable-vertical-pod-autoscaling --enable-shielded-nodes --node-locations "europe-central2-c"
+gcloud beta container --project "airport-cc" clusters create "cluster-1" --zone "europe-central2-c" --no-enable-basic-auth --cluster-version "1.27.3-gke.100" --release-channel "regular" --machine-type "e2-custom-4-4096" --image-type "COS_CONTAINERD" --disk-type "pd-standard" --disk-size "100" --metadata disable-legacy-endpoints=true --scopes "https://www.googleapis.com/auth/devstorage.read_only","https://www.googleapis.com/auth/logging.write","https://www.googleapis.com/auth/monitoring","https://www.googleapis.com/auth/servicecontrol","https://www.googleapis.com/auth/service.management.readonly","https://www.googleapis.com/auth/trace.append" --num-nodes "3" --logging=SYSTEM,WORKLOAD,API_SERVER --monitoring=SYSTEM,API_SERVER,POD --enable-ip-alias --network "projects/airport-cc/global/networks/default" --subnetwork "projects/airport-cc/regions/europe-central2/subnetworks/default" --no-enable-intra-node-visibility --default-max-pods-per-node "110" --security-posture=standard --workload-vulnerability-scanning=disabled --no-enable-master-authorized-networks --addons HorizontalPodAutoscaling,HttpLoadBalancing,GcePersistentDiskCsiDriver --enable-autoupgrade --enable-autorepair --max-surge-upgrade 1 --max-unavailable-upgrade 0 --binauthz-evaluation-mode=DISABLED --enable-managed-prometheus --enable-vertical-pod-autoscaling --enable-shielded-nodes --node-locations "europe-central2-c"
 
 docker pull ccuni/camera-service-2023w
 docker pull ccuni/image-analysis-service-2023w
@@ -6,21 +6,27 @@ docker pull ccuni/face-recognition-service-2023w
 docker pull ccuni/section-service-2023w
 docker pull ccuni/alert-service-2023w
 
-docker build -t collector-service .
+docker build -t ccuni/collector-service-2023w .
 
-docker tag ccuni/alert-service-2023w gcr.io/univiecca1/alert-service-2023w
-docker tag ccuni/camera-service-2023w gcr.io/univiecca1/camera-service-2023w
-docker tag collector-service gcr.io/univiecca1/collector-service
-docker tag ccuni/face-recognition-service-2023w gcr.io/univiecca1/face-recognition-service-2023w
-docker tag ccuni/image-analysis-service-2023w gcr.io/univiecca1/image-analysis-service-2023w
-docker tag ccuni/section-service-2023w gcr.io/univiecca1/section-service-2023w
+docker tag ccuni/alert-service-2023w gcr.io/airport-cc/alert-service-2023w
+docker tag ccuni/camera-service-2023w gcr.io/airport-cc/camera-service-2023w
+docker tag ccuni/collector-service-2023w gcr.io/airport-cc/collector-service-2023w
+docker tag ccuni/face-recognition-service-2023w gcr.io/airport-cc/face-recognition-service-2023w
+docker tag ccuni/image-analysis-service-2023w gcr.io/airport-cc/image-analysis-service-2023w
+docker tag ccuni/section-service-2023w gcr.io/airport-cc/section-service-2023w
 
-docker push gcr.io/univiecca1/alert-service-2023w
-docker push gcr.io/univiecca1/camera-service-2023w
-docker push gcr.io/univiecca1/collector-service
-docker push gcr.io/univiecca1/face-recognition-service-2023w
-docker push gcr.io/univiecca1/image-analysis-service-2023w
-docker push gcr.io/univiecca1/section-service-2023w
+docker push gcr.io/airport-cc/alert-service-2023w
+docker push gcr.io/airport-cc/camera-service-2023w
+docker push gcr.io/airport-cc/collector-service-2023w
+docker push gcr.io/airport-cc/face-recognition-service-2023w
+docker push gcr.io/airport-cc/image-analysis-service-2023w
+docker push gcr.io/airport-cc/section-service-2023w
+
+docker buildx build --platform linux/amd64 \
+    -t ccuni/collector-service-2023w \
+    -f Dockerfile \
+    --no-cache \
+    .
 
 
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
@@ -35,3 +41,20 @@ get the IP of ingress and add it to yaml
 
 kubectl apply -f ./kubernetes
 
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+
+helm install prometheus prometheus-community/kube-prometheus-stack
+
+helm install grafana grafana/grafana
+
+
+   kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=grafana" -o jsonpath="{.items[0].metadata.name}")
+     kubectl --namespace default port-forward $POD_NAME 3000
+
+http://prometheus-kube-prometheus-prometheus.default.svc.cluster.local:9090
+
+kubectl port-forward svc/prometheus-kube-prometheus-prometheus 9090

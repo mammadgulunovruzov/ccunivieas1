@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: collector-service
-        image: gcr.io/univiecca1/collector-service
+        image: gcr.io/airport-cc/collector-service-2023w
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8088
