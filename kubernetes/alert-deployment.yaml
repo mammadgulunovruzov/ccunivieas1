@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alert-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: alert-service
+  template:
+    metadata:
+      labels:
+        app: alert-service
+    spec:
+      containers:
+        - name: alert
+          image: gcr.io/airport-404122/alert-service-2023w
+          ports:
+            - containerPort: 8083

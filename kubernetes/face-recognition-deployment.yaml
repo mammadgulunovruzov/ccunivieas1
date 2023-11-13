@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: face-recognition-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: face-recognition-service
+  template:
+    metadata:
+      labels:
+        app: face-recognition-service
+    spec:
+      containers:
+        - name: face-recognition
+          image: gcr.io/airport-404122/face-recognition-service-2023w
+          ports:
+            - containerPort: 8082

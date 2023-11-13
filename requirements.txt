@@ -1,0 +1,5 @@
+flask
+requests
+typing_json
+typing
+pydantic

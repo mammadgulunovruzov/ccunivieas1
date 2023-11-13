@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: camera-service-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: camera-service
+  template:
+    metadata:
+      labels:
+        app: camera-service
+    spec:
+      containers:
+        - name: camera-service
+          image: gcr.io/airport-404122/camera-service-2023w
+          ports:
+            - containerPort: 8085
+          

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: collector-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: collector-service
+  template:
+    metadata:
+      labels:
+        app: collector-service
+    spec:
+      containers:
+      - name: collector-service
+        image: gcr.io/airport-404122/collector-service
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8088
+        resources:
+          requests:
+            memory: "500Mi"
+            cpu: "500m"
+          limits:
+            memory: "800Mi"
+            cpu: "800m"
