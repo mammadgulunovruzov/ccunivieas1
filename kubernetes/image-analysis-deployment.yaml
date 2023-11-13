@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: image-analysis-service
-          image: gcr.io/airport-404122/image-analysis-service-2023w
+          image: gcr.io/univiecca1/image-analysis-service-2023w
           ports:
             - containerPort: 8081

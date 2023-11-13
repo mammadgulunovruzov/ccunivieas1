@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: camera-service
-          image: gcr.io/airport-404122/camera-service-2023w
+          image: gcr.io/univiecca1/camera-service-2023w
           ports:
             - containerPort: 8085
           

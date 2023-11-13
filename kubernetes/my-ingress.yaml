@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: 34.116.220.170.nip.io
+    - host: 34.116.252.134.nip.io
       http:
         paths:
           - pathType: Prefix
@@ -45,13 +45,13 @@ spec:
                 name: face-recognition-service
                 port:
                   number: 8080
-            path: /face(/|$)(.*)
+            path: /face-recognition(/|$)(.*)
           - pathType: Prefix
             backend:
               service:
                 name: image-analysis-service
                 port:
                   number: 8080
-            path: /image(/|$)(.*)
+            path: /image-analysis(/|$)(.*)
 
             

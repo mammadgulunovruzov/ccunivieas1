@@ -14,14 +14,7 @@ spec:
     spec:
       containers:
       - name: collector-service
-        image: gcr.io/airport-404122/collector-service
+        image: gcr.io/univiecca1/collector-service
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8088
-        resources:
-          requests:
-            memory: "500Mi"
-            cpu: "500m"
-          limits:
-            memory: "800Mi"
-            cpu: "800m"

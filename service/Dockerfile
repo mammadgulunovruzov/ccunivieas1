@@ -1,6 +1,6 @@
 
 # we start from slim python images, which already has all the requirements for python
-FROM python:3.8
+FROM python:3.7-slim
 
 # this will be working directory inside of the image
 WORKDIR /usr/src/app

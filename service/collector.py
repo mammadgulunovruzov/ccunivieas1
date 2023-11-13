@@ -6,10 +6,10 @@ import sys
 app = Flask(__name__)
 
 # URLs
-image_analysis_url = "http://172.18.0.1:8081/frame"
-section_url = "http://172.18.0.1:8084/persons"
-face_recognition_url = "http://172.18.0.1:8082/frame"
-alert_url = "http://172.18.0.1:8083/alerts"
+image_analysis_url = "http://image-analysis-service:8080/frame"
+section_url = "http://section-service:8080/persons"
+face_recognition_url = "http://face-recognition-service:8080/frame"
+alert_url = "http://alert-service:8080/alerts"
 
 @app.route('/frame', methods=['POST'])
 def frame_collector():
